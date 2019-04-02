@@ -23,7 +23,7 @@
     "lerna:test": "lerna exec npm run test"
   },
   "devDependencies": {
-    "lerna": "^3.13.0",
+    "lerna": "^3.13.1",
     "@worldsibu/convector-adapter-mock": "~1.3.0",
     "@worldsibu/convector-platform-fabric": "~1.3.0",
     "@worldsibu/hurley": "~1.0.0",

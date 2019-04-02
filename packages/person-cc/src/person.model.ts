@@ -13,17 +13,12 @@ export class Attribute extends ConvectorModel<Attribute>{
   public readonly type = 'io.worldsibu.attribute';
 
   @Required()
-  @ReadOnly()
-  @Validate(yup.string())
-  public name: string;
-
-  @Required()
   public content: any;
 
   @Required()
   @ReadOnly()
-  @Validate(yup.date())
-  public issuedDate: Date;
+  @Validate(yup.number())
+  public issuedDate: number;
 
   public expiresDate: Date;
 
