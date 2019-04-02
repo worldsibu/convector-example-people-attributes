@@ -1,5 +1,7 @@
 # attributesDb - person
 
+> This project is the result of this tutorial: https://docs.worldsibu.com/article/89-tutorial
+
 This awesome project was created automatically with <a href="https://github.com/worldsibu/convector-cli" target="_blank">Convector CLI</a>.
 By default new Convector projects locally include <a href="https://github.com/worldsibu/hurley">Hurley</a> to manage your development environment seamlessly, so you don't have to worry about setting up the network and hard ways to install  and upgrade your chaincodes.
 

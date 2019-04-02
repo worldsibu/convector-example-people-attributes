@@ -11,7 +11,7 @@ import { Participant, ParticipantController } from '../src';
 describe('Participant', () => {
   let adapter: MockControllerAdapter;
   let participantCtrl: ConvectorControllerClient<ParticipantController>;
-  
+
   before(async () => {
     // Mocks the blockchain execution environment
     adapter = new MockControllerAdapter();
@@ -25,19 +25,13 @@ describe('Participant', () => {
       }
     ]);
   });
-  
-  it('should create a default model', async () => {
-    // const modelSample = new Participant({
-    //   id: uuid(),
-    //   name: 'Test',
-    //   created: Date.now(),
-    //   modified: Date.now()
-    // });
 
-    // await participantCtrl.create(modelSample);
-  
-    // const justSavedModel = await adapter.getById<Participant>(modelSample.id);
-  
-    // expect(justSavedModel.id).to.exist;
+  it('should create a default model', async () => {
+    const id = uuid();
+    await participantCtrl.register(id, 'Test Participant');
+
+    const justSavedModel = await adapter.getById<Participant>(id);
+
+    expect(justSavedModel.id).to.exist;
   });
 });

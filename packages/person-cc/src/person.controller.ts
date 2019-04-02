@@ -67,13 +67,11 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
 
     let exists = person.attributes.find(attr => attr.id === attribute.id);
 
-    console.log(exists);
     if (!!exists) {
       let attributeOwner = await Participant.getOne(exists.certifierID);
       let attributeOwnerActiveIdentity = attributeOwner.identities.filter(
         identity => identity.status === true)[0];
 
-      console.log(`${this.sender} ${attributeOwnerActiveIdentity.fingerprint}`);
       // Already has one, let's see if the requester has permissions to update it
       if (this.sender !== attributeOwnerActiveIdentity.fingerprint) {
         throw new Error(`User already has an attribute for ${attribute.id} but current identity cannot update it`);

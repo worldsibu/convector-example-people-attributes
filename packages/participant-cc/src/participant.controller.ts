@@ -38,7 +38,6 @@ export class ParticipantController extends ConvectorController {
         fingerprint: this.sender,
         status: true
       }];
-      console.log(JSON.stringify(participant));
       await participant.save();
     } else {
       throw new Error('Identity exists already, please call changeIdentity fn for updates');
@@ -53,24 +52,18 @@ export class ParticipantController extends ConvectorController {
   ) {
     // Check permissions
     let isAdmin = this.fullIdentity.getAttributeValue('admin');
-    console.log(this.fullIdentity);
-    console.log(isAdmin);
     let requesterMSP = this.fullIdentity.getMSPID();
 
     // Retrieve to see if exists
     const existing = await Participant.getOne(id);
-    console.log('Existing participant:');
-    console.log(existing);
     if (!existing || !existing.id) {
       throw new Error('No identity exists with that ID');
     }
 
-    console.log(`existing.msp=${existing.msp} requesterMSP=${requesterMSP}`);
     if (existing.msp != requesterMSP) {
       throw new Error('Unathorized. MSPs do not match');
     }
 
-    console.log(`isAdmin=${isAdmin}`);
     if (!isAdmin) {
       throw new Error('Unathorized. Requester identity is not an admin');
     }

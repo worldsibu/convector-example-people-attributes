@@ -72,7 +72,6 @@ describe('Person', () => {
 
     const justSavedModel = await adapter.getById<Participant>('gov');
 
-    console.log(justSavedModel);
     expect(justSavedModel.id).to.exist;
   });
 
@@ -107,7 +106,7 @@ describe('Person', () => {
     expect(resultingAttr.id).to.eq(attribute.id);
   });
 
-  it('should create a MIT participant', async () => {
+  it('should create a participant for the MIT', async () => {
     // Fake another certificate for tests
     (adapter.stub as any).usercert = fakeSecondParticipantCert;
 
@@ -115,8 +114,17 @@ describe('Person', () => {
 
     const justSavedModel = await adapter.getById<Participant>('mit');
 
-    console.log(justSavedModel);
     expect(justSavedModel.id).to.exist;
+  });
+
+  it('should try to create a person but the MIT cannot', async () => {
+    const personSample = new Person({
+      id: personId + '1111',
+      name: 'Walter Montes'
+    });
+
+    await expect(personCtrl.create(personSample)).to.be.eventually
+      .rejectedWith(Error);
   });
 
   it('should add a mit-degree attribute through the MIT identity', async () => {

@@ -9,6 +9,11 @@
   "//**INSIDE-DOCKER**//networkProfile": "/config/network-profiles/org1.network-profile.inside-docker.yaml",
   "controllers": [
     {
+      "name": "participant-cc",
+      "version": "file:./packages/participant-cc",
+      "controller": "ParticipantController"
+    },
+    {
       "name": "person-cc",
       "version": "file:./packages/person-cc",
       "controller": "PersonController"
@@ -16,28 +21,11 @@
   ],
   "policy": {
     "identities": [
-      {
-        "role": {
-          "name": "member",
-          "mspId": "Org1MSP"
-        }
-      },
-      {
-        "role": {
-          "name": "member",
-          "mspId": "Org2MSP"
-        }
-      }
+      { "role": { "name": "member", "mspId": "Org1MSP" }},
+      { "role": { "name": "member", "mspId": "Org2MSP" }}
     ],
     "policy": {
-      "1-of": [
-        {
-          "signed-by": 0
-        },
-        {
-          "signed-by": 1
-        }
-      ]
+      "1-of": [{ "signed-by": 0 }, { "signed-by": 1 }]
     }
   }
 }
