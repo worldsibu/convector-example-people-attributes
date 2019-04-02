@@ -26,8 +26,11 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
     if (!gov || !gov.identities) {
       throw new Error('No government identity has been registered yet');
     }
-    const govActiveIdentity = gov.identities.filter(identity => identity.status === true)[0];
+    const govActiveIdentity = gov.identities.find(identity => identity.status === true);
 
+    if (!govActiveIdentity) {
+      throw new Error('No active identity found for participant');
+    }
     if (this.sender !== govActiveIdentity.fingerprint) {
       throw new Error(`Just the government - ID=gov - can create people - requesting organization was ${this.sender}`);
     }
@@ -48,8 +51,12 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
       throw new Error(`No participant found with id ${attribute.certifierID}`);
     }
 
-    const participantActiveIdentity = participant.identities.filter(
-      identity => identity.status === true)[0];
+    const participantActiveIdentity = participant.identities.find(
+      identity => identity.status === true);
+
+    if (!participantActiveIdentity) {
+      throw new Error('No active identity found for participant');
+    }
 
     if (this.sender !== participantActiveIdentity.fingerprint) {
       throw new Error(`Requester identity cannot sign with the current certificate ${this.sender}. This means that the user requesting the tx and the user set in the param certifierId do not match`);
@@ -69,8 +76,8 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
 
     if (!!exists) {
       let attributeOwner = await Participant.getOne(exists.certifierID);
-      let attributeOwnerActiveIdentity = attributeOwner.identities.filter(
-        identity => identity.status === true)[0];
+      let attributeOwnerActiveIdentity = attributeOwner.identities.find(
+        identity => identity.status === true);
 
       // Already has one, let's see if the requester has permissions to update it
       if (this.sender !== attributeOwnerActiveIdentity.fingerprint) {
