@@ -9,22 +9,16 @@
 npm start
 
 # Important: This first call takes some seconds as it provisions the containers needed to run the smart contract
-# Create the government Network Participant with the user Admin
-hurl invoke person participant_register gov "Big Government" -u admin
+# Create some seed data to play with the project
+npm run seed
 
-# Add the MIT
-hurl invoke person participant_register mit "MIT" -u user1
-
-# Create a person
-hurl invoke person person_create "{\"id\":\"1-100-100\", \"name\": \"Walter Montes\"}" -u admin
-
-# Assign it a birth-year attribute
-hurl invoke person person_addAttribute "1-100-100" "{\"id\": \"birth-year\", \"certifierID\": \"gov\", \"content\": \"1993\", \"issuedDate\": 1554239270 }" -u admin
+# Run the API
+npx lerna run start --scope server --stream
 ```
 
 ## Tests
 
-```
+```bash
 npm test
 ```
 

@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "start": "npm run env:restart && npm run cc:start -- person",
+    "seed": "./seed.sh",
     "install": "npm-run-all -s lerna:install",
     "build": "node ./update-paths.js",
     "env:restart": "hurl new",
