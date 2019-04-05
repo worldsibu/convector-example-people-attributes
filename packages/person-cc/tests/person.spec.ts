@@ -161,4 +161,21 @@ describe('Person', () => {
     attribute.expired = true;
     await expect(personCtrl.addAttribute(personId, attribute)).to.be.eventually.rejectedWith(Error);
   });
+
+  it('should get all the people', async () => {
+    let res = await personCtrl.getAll();
+    console.log(JSON.stringify(res));
+    expect(res.length).to.be.eq(1);
+  });
+
+  it('should get all the people with the birth-year 1993', async () => {
+    let res = <Person[]>(await personCtrl.getByAttribute('birth-year', '1993'));
+    console.log(JSON.stringify(res));
+    expect(res.length).to.be.eq(1);
+  });
+
+  it('should get zero people with the birth-year 1990', async () => {
+    let res = <Person[]>(await personCtrl.getByAttribute('birth-year', '1990'));
+    expect(res.length).to.be.eq(0);
+  });
 });

@@ -103,4 +103,30 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
     }
     return existing;
   }
+
+  @Invokable()
+  public async getAll(
+  ) {
+    return (await Person.getAll('io.worldsibu.person')).map(person => person.toJSON());
+  }
+
+  @Invokable()
+  public async getByAttribute(
+    @Param(yup.string())
+    id: string,
+    @Param(yup.mixed())
+    value: any
+  ) {
+
+    return await Person.query(Person, {
+      'selector': {
+        'attributes': {
+          '$elemMatch': {
+            'id': id,
+            'content': value
+          }
+        }
+      }
+    });
+  }
 }
