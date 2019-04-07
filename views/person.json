@@ -1,0 +1,10 @@
+{
+    "views": {
+        "all": {
+            "map": "function(doc) {if (doc.type.toUpperCase() === 'io.worldsibu.person'.toUpperCase()) emit(doc.id, doc)}"
+        },
+        "by-birth-year": {
+            "map": "function (doc) {var lookup = {};for (var i = 0, len = doc.attributes.length; i < len; i++) {lookup[doc.attributes[i].id] = doc.attributes[i];}if(lookup['birth-year']){emit(lookup['birth-year'].content, 1);}}"
+        }
+    }
+}

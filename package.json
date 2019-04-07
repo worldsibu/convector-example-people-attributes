@@ -19,10 +19,11 @@
     "===================INTERNALS===================": "===================NO NEED TO CALL THEM DIRECTLY===================",
     "lerna:install": "lerna bootstrap",
     "lerna:build": "lerna run build",
-    "cc:package": "f() { npm run lerna:build; chaincode-manager --update --config ./$2.$1.config.json --output ./chaincode-$1 package; }; f",
+    "cc:package": "f() { npm run lerna:build; chaincode-manager --update --config ./$2.$1.config.json --output ./chaincode-$1 package; npm run copy:indexes -- $1; }; f",
     "cc:install": "f() { hurl install $1 node -P ./chaincode-$1; }; f",
     "cc:install:debug": "f() { hurl install $1 node -P ./chaincode-$1 --debug; }; f",
-    "lerna:test": "lerna exec npm run test"
+    "lerna:test": "lerna exec npm run test",
+    "copy:indexes": "f () { mkdir -p ./chaincode-$1/META-INF/statedb/couchdb/indexes; cp -a ./indexes/ ./chaincode-$1/META-INF/statedb/couchdb/indexes; }; f"
   },
   "devDependencies": {
     "lerna": "^3.13.1",

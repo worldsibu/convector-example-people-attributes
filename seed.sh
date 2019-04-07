@@ -8,3 +8,9 @@ echo "Creating person: John Doe"
 hurl invoke person person_create "{\"id\":\"1-100-100\", \"name\": \"John Doe\"}" -u admin
 echo "Adding attribute 'birth-year' as the Big Government identity"
 hurl invoke person person_addAttribute "1-100-100" "{\"id\": \"birth-year\", \"certifierID\": \"gov\", \"content\": \"1993\", \"issuedDate\": 1554239270 }" -u admin
+
+hurl invoke person person_create "{\"id\":\"1-100-101\", \"name\": \"Carl Jr\"}" -u admin
+hurl invoke person person_addAttribute "1-100-101" "{\"id\": \"birth-year\", \"certifierID\": \"gov\", \"content\": \"1993\", \"issuedDate\": 1554239270 }" -u admin
+
+hurl invoke person person_create "{\"id\":\"1-100-102\", \"name\": \"Alfred\"}" -u admin
+hurl invoke person person_addAttribute "1-100-102" "{\"id\": \"birth-year\", \"certifierID\": \"gov\", \"content\": \"1988\", \"issuedDate\": 1554239270 }" -u admin
