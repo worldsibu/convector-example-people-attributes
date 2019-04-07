@@ -1,9 +1,35 @@
 import { Router, Request, Response } from 'express';
 import { PersonControllerBackEnd, InitServerIdentity } from '../convector';
 import { Person, Attribute } from 'person-cc';
-import { identityId } from '../env';
+import { identityId, chaincode, couchDBView } from '../env';
 
 const router: Router = Router();
+
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        res.send(await getAllPerson());
+    } catch (err) {
+        console.log(JSON.stringify(err));
+        res.status(500).send(err);
+    }
+});
+
+export async function getAllPerson() {
+    const viewUrl = '_design/person/_view/all';
+    const queryOptions = { startKey: [''], endKey: [''] };
+
+    try {
+        const result = <Person[]>(await Person.query(Person, couchDBView, viewUrl, queryOptions));
+        return await Promise.all(result.map(item => item.toJSON()));
+    } catch (err) {
+        console.log(err);
+        if (err.code === 'EDOCMISSING') {
+            return [];
+        } else {
+            throw err;
+        }
+    }
+}
 
 router.post('/', async (req: Request, res: Response) => {
     try {

@@ -5,7 +5,7 @@ import {
   ReadOnly,
   Required,
   Validate
-} from '@worldsibu/convector-core-model';
+} from '@worldsibu/convector-core';
 
 export class Attribute extends ConvectorModel<Attribute>{
   @ReadOnly()

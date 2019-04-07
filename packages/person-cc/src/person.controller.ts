@@ -4,7 +4,8 @@ import {
   Controller,
   ConvectorController,
   Invokable,
-  Param
+  Param,
+  FlatConvectorModel
 } from '@worldsibu/convector-core';
 import { Participant } from 'participant-cc';
 
@@ -105,9 +106,8 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
   }
 
   @Invokable()
-  public async getAll(
-  ) {
-    return (await Person.getAll('io.worldsibu.person')).map(person => person.toJSON());
+  public async getAll(): Promise<FlatConvectorModel<Person>[]> {
+    return (await Person.getAll('io.worldsibu.person')).map(person => person.toJSON() as any);
   }
 
   @Invokable()
