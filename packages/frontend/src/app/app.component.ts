@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PersonService } from './person.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,11 @@ export class AppComponent implements OnInit {
   title = 'app';
   list = [];
 
-  ngOnInit(): void {
+  constructor(private service: PersonService) {
+
+  }
+
+  async ngOnInit() {
     this.list = [{
       id: '1',
       name: 'Walter',
@@ -24,5 +29,12 @@ export class AppComponent implements OnInit {
         issuedDate: 1
       }]
     }];
+
+    await this.service.getAll().then(res => {
+      this.list = res;
+    }).catch(
+      err => {
+        console.log(err);
+      });
   }
 }

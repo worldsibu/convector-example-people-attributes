@@ -11,8 +11,8 @@ export class PersonService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any> {
+  getAll(): Promise<any> {
     return this.http
-      .get(`${environment.serverAddress}/person`);
+      .get(`${environment.serverAddress}/person`).toPromise();
   }
 }

@@ -27,6 +27,7 @@ export async function getAllPerson() {
     const queryOptions = { startKey: [''], endKey: [''] };
 
     try {
+        console.log(couchDBView);
         const result = <Person[]>(await Person.query(Person, couchDBView, viewUrl, queryOptions));
         return await Promise.all(result.map(item => item.toJSON()));
     } catch (err) {
