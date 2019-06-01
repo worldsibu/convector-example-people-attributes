@@ -12,6 +12,9 @@ npm start
 # Create some seed data to play with the project
 npm run seed
 
+# Install a view on couch
+./views/install.sh
+
 # Run the API
 npx lerna run start --scope server --stream
 ```
