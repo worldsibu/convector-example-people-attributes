@@ -1,0 +1,15 @@
+{
+  "skipInit": true,
+  "controllers": [
+    {
+      "name": "participant-cc",
+      "version": "file:./packages/participant-cc",
+      "controller": "ParticipantController"
+    },
+    {
+      "name": "person-cc",
+      "version": "file:./packages/person-cc",
+      "controller": "PersonController"
+    }
+  ]
+}

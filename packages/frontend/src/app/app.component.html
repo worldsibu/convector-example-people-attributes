@@ -1,0 +1,29 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="select-identity">
+  <select>
+    <option>
+      Admin
+    </option>
+  </select>
+</div>
+
+<div class="content">
+  <div *ngFor="let item of list" class="person">
+    <small>{{item.id}}</small>
+    <h2>{{item.name}}</h2>
+    <ul>
+      <li *ngFor="let attribute of item.attributes">
+        {{attribute.id}}={{attribute.content}}
+        <small>Certified {{attribute.issuedDate}} by <span class="snack" title="Click for details">{{attribute.certifierID}}</span></small>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <hr />
+  <p>
+    Created by <a href="https://worldsibu.tech/?ref=forma_demo" target="_blank">WorldSibu</a> under an Apache 2.0
+    license.
+  </p>
+</footer>
