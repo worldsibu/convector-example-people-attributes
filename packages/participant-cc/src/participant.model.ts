@@ -29,6 +29,11 @@ export class Participant extends ConvectorModel<Participant> {
   public name: string;
 
   @ReadOnly()
+  @Required()
+  @Validate(yup.string())
+  public CAUserName: string;
+
+  @ReadOnly()
   @Validate(yup.string())
   public msp: string;
 

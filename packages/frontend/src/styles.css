@@ -26,3 +26,21 @@ footer>p {
     text-align: center;
     padding: 24px;
 }
+
+input {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: solid 1px #F40257;
+    margin: 2px;
+}
+
+button {
+    margin: 2px;
+    border-radius: 6px;
+    padding: 4px 8px;
+    border: solid 1px #F40257;
+    background: #F40257;
+    color: #ffffff;
+    cursor: pointer;
+    text-transform: uppercase;
+}

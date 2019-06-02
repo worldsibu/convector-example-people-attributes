@@ -43,3 +43,15 @@
     border-radius: 6px;
     cursor: pointer;
 }
+
+.newPersonForm {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.status {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #ddd;
+}

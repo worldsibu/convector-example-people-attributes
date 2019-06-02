@@ -117,7 +117,6 @@ export class PersonController extends ConvectorController<ChaincodeTx> {
     @Param(yup.mixed())
     value: any
   ) {
-
     return await Person.query(Person, {
       'selector': {
         'attributes': {

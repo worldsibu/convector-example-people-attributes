@@ -1,10 +1,20 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<div class="status">{{status}}</div>
 <div class="select-identity">
-  <select>
-    <option>
-      Admin
+  <span>Transacting as: </span>
+  <select [(ngModel)]="selectedIdentity">
+    <option *ngFor="let item of identities" value="{{item.id}}">
+      {{item.name}}
     </option>
   </select>
+</div>
+
+<div class="newPersonForm">
+  <p>
+    <input [(ngModel)]="newPerson.id" placeholder="Identifier" />
+    <input [(ngModel)]="newPerson.name" placeholder="Name" />
+    <button type="button" (click)="createPerson(newPerson)">Create</button>
+  </p>
+
 </div>
 
 <div class="content">
@@ -14,7 +24,8 @@
     <ul>
       <li *ngFor="let attribute of item.attributes">
         {{attribute.id}}={{attribute.content}}
-        <small>Certified {{attribute.issuedDate}} by <span class="snack" title="Click for details">{{attribute.certifierID}}</span></small>
+        <small>Certified {{attribute.issuedDate}} by <span class="snack"
+            title="Click for details">{{attribute.certifierID}}</span></small>
       </li>
     </ul>
   </div>

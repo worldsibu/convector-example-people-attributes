@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonService } from './person.service';
+import { ParticipantService } from './participant.service';
 
 @Component({
   selector: 'app-root',
@@ -8,33 +9,66 @@ import { PersonService } from './person.service';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+  identities = [];
+  selectedIdentity = '';
   list = [];
+  newPerson = { id: '', name: '' };
+  status = 'Loading people and participants';
 
-  constructor(private service: PersonService) {
+  constructor(private service: PersonService,
+    private participantService: ParticipantService) {
 
   }
 
   async ngOnInit() {
-    this.list = [{
-      id: '1',
-      name: 'Walter',
-      attributes: [],
-    }, {
-      id: '2',
-      name: 'John',
-      attributes: [{
-        id: 'birth-year',
-        certifierID: 'gov',
-        content: '1993',
-        issuedDate: 1
-      }]
-    }];
-
-    await this.service.getAll().then(res => {
+    await this.reloadPeople();
+    await this.reloadParticipants();
+    this.cleanStatus();
+  }
+  setStatus(str, timeout?) {
+    this.status = str;
+    if (timeout) {
+      setTimeout(() => {
+        this.status = '';
+      }, timeout);
+    }
+  }
+  cleanStatus() {
+    this.status = '';
+  }
+  cleanForm() {
+    this.newPerson = { id: '', name: '' };
+  }
+  async createPerson(person) {
+    console.log(person);
+    if (!person.id || !person.name) {
+      return;
+    }
+    this.setStatus('Requesting to create person...');
+    await this.service.create(person, this.selectedIdentity).then(async res => {
+      await this.reloadPeople();
+      this.cleanForm();
+    }).catch(err => {
+      console.log(err);
+      this.setStatus('Identity could not create person', 5000);
+    });
+  }
+  async reloadPeople() {
+    return await this.service.getAll().then(res => {
       this.list = res;
     }).catch(
       err => {
         console.log(err);
       });
+  }
+  async reloadParticipants() {
+    return await this.participantService.getAll().then(res => {
+      this.identities = res;
+      if (res && res.length > 0) {
+        this.selectedIdentity = res[0].id;
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 }

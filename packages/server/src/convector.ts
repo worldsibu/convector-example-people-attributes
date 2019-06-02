@@ -1,5 +1,5 @@
 import { join, resolve } from "path";
-import { keyStore, identityName, channel, chaincode, networkProfile, identityId } from './env';
+import { keyStore, identityName, channel, chaincode, networkProfile, identityId, buildParamsWithNewIdentity } from './env';
 import * as fs from 'fs';
 import { FabricControllerAdapter } from '@worldsibu/convector-adapter-fabric';
 import { ClientFactory } from '@worldsibu/convector-core';
@@ -7,6 +7,25 @@ import { ClientFactory } from '@worldsibu/convector-core';
 import { ParticipantController, Participant } from 'participant-cc';
 import { PersonController, Person } from 'person-cc';
 
+export async function refreshAdapter(identity, organizationMSP) {
+    const params = buildParamsWithNewIdentity(identity, organizationMSP);
+    const adapter = new FabricControllerAdapter({
+        txTimeout: 300000,
+        user: identity,
+        channel,
+        chaincode,
+        keyStore: resolve(__dirname, params.keyStore),
+        networkProfile: resolve(__dirname, params.networkProfile)
+        // userMspPath: keyStore
+    });
+    const initAdapter = adapter.init();
+    await initAdapter;
+
+    return {
+        ParticipantControllerBackEnd: ClientFactory(ParticipantController, adapter),
+        PersonControllerBackEnd: ClientFactory(PersonController, adapter)
+    };
+}
 const adapter = new FabricControllerAdapter({
     txTimeout: 300000,
     user: identityName,

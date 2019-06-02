@@ -7,16 +7,12 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class PersonService {
+export class ParticipantService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAll(): Promise<any> {
     return this.http
-      .get(`${environment.serverAddress}/person`).toPromise();
-  }
-  create(person, identity: string): Promise<any> {
-    return this.http
-      .post(`${environment.serverAddress}/person?identity=${identity}`, person).toPromise();
+      .get(`${environment.serverAddress}/participant`).toPromise();
   }
 }

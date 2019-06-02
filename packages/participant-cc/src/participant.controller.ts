@@ -9,14 +9,10 @@ import {
 } from '@worldsibu/convector-core';
 
 import { Participant } from './participant.model';
-import { ClientIdentity } from 'fabric-shim';
+import { ChaincodeTx } from '@worldsibu/convector-platform-fabric';
 
 @Controller('participant')
-export class ParticipantController extends ConvectorController {
-  get fullIdentity(): ClientIdentity {
-    const stub = (BaseStorage.current as any).stubHelper;
-    return new ClientIdentity(stub.getStub());
-  };
+export class ParticipantController extends ConvectorController<ChaincodeTx> {
 
   @Invokable()
   public async register(
@@ -32,7 +28,9 @@ export class ParticipantController extends ConvectorController {
       let participant = new Participant();
       participant.id = id;
       participant.name = name || id;
-      participant.msp = this.fullIdentity.getMSPID();
+      participant.msp = this.tx.identity.getMSPID();
+      participant.CAUserName = this.tx.identity.getX509Certificate().subject.commonName;
+      console.log(this.tx.identity.getX509Certificate().subject.commonName);
       // Create a new identity
       participant.identities = [{
         fingerprint: this.sender,
@@ -51,8 +49,8 @@ export class ParticipantController extends ConvectorController {
     newIdentity: string
   ) {
     // Check permissions
-    let isAdmin = this.fullIdentity.getAttributeValue('admin');
-    let requesterMSP = this.fullIdentity.getMSPID();
+    let isAdmin = this.tx.identity.getAttributeValue('admin');
+    let requesterMSP = this.tx.identity.getMSPID();
 
     // Retrieve to see if exists
     const existing = await Participant.getOne(id);
@@ -91,5 +89,10 @@ export class ParticipantController extends ConvectorController {
       throw new Error(`No identity exists with that ID ${id}`);
     }
     return existing;
+  }
+  @Invokable()
+  public async getAll(
+  ) {
+    return (await Participant.getAll('io.worldsibu.examples.participant')).map(participant => participant.toJSON() as any);
   }
 }
