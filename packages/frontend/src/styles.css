@@ -7,6 +7,10 @@ input,
     font-family: 'Source Sans Pro', sans-serif;
 }
 
+body {
+    padding-bottom: 60px;
+}
+
 a {
     color: #F40257;
 }
@@ -20,6 +24,7 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
+    background: #fff;
 }
 
 footer>p {
@@ -43,4 +48,12 @@ button {
     color: #ffffff;
     cursor: pointer;
     text-transform: uppercase;
+}
+
+.double-panel {
+    display: flex;
+}
+
+.double-panel>div {
+    flex: 1 0 0;
 }

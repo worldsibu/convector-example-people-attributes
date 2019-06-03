@@ -19,7 +19,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.get('/', async (req: Request, res: Response) => {
     try {
         let { id } = req.params;
-        res.send(await ParticipantControllerBackEnd.getAll());
+        res.send(await ParticipantControllerBackEnd.$query().getAll());
     } catch (err) {
         console.log(JSON.stringify(err));
         res.status(500).send(err);

@@ -1,4 +1,4 @@
-<div class="status">{{status}}</div>
+<div class="status" *ngIf="status">{{status}}</div>
 <div class="select-identity">
   <span>Transacting as: </span>
   <select [(ngModel)]="selectedIdentity">
@@ -19,15 +19,29 @@
 
 <div class="content">
   <div *ngFor="let item of list" class="person">
-    <small>{{item.id}}</small>
-    <h2>{{item.name}}</h2>
-    <ul>
-      <li *ngFor="let attribute of item.attributes">
-        {{attribute.id}}={{attribute.content}}
-        <small>Certified {{attribute.issuedDate}} by <span class="snack"
-            title="Click for details">{{attribute.certifierID}}</span></small>
-      </li>
-    </ul>
+    <div class="double-panel">
+      <div>
+        <small>{{item.id}}</small>
+        <h2>{{item.name}}</h2>
+        <ul>
+          <li *ngFor="let attribute of item.attributes">
+            {{attribute.id}}={{attribute.content}}
+            <small>Certified {{attribute.issuedDate}} by <span class="snack"
+                title="Click for details">{{attribute.certifierID}}</span></small>
+          </li>
+        </ul>
+      </div>
+      <div>
+          <div class="newPersonForm">
+              <p>
+                <input [(ngModel)]="item.newAttribute.id" placeholder="Attribute Identifier" />
+                <input [(ngModel)]="item.newAttribute.content" placeholder="Content" />
+                <button type="button" (click)="createAttribute(item)">Create</button>
+              </p>
+
+            </div>
+      </div>
+    </div>
   </div>
 </div>
 

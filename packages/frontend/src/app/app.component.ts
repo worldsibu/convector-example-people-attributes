@@ -47,14 +47,35 @@ export class AppComponent implements OnInit {
     this.setStatus('Requesting to create person...');
     await this.service.create(person, this.selectedIdentity).then(async res => {
       await this.reloadPeople();
+      this.setStatus('Transaction accepted', 3000);
       this.cleanForm();
     }).catch(err => {
       console.log(err);
       this.setStatus('Identity could not create person', 5000);
     });
   }
+  async createAttribute(person) {
+    console.log(person);
+    if (!person.newAttribute.id || !person.newAttribute.content) {
+      return;
+    }
+    this.setStatus('Requesting to add attribute to person...');
+    await this.service.addAttribute(person.id, person.newAttribute, this.selectedIdentity)
+      .then(async res => {
+        await this.reloadPeople();
+        this.setStatus('Transaction accepted', 3000);
+        this.cleanForm();
+      }).catch(err => {
+        console.log(err);
+        this.setStatus('Identity could not add attribute to person', 5000);
+      });
+  }
   async reloadPeople() {
     return await this.service.getAll().then(res => {
+      res = res.map(item => {
+        item.newAttribute = { id: '', content: '' };
+        return item;
+      });
       this.list = res;
     }).catch(
       err => {
