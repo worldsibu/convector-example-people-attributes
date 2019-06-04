@@ -18,8 +18,8 @@ d(`CHANNEL=${channel}`);
 
 d('First transaction may take a while');
 
-Promise.all(
-    [{
+[
+    {
         username: 'gov',
         name: 'Government'
     }, {
@@ -28,57 +28,59 @@ Promise.all(
     }, {
         username: 'naba',
         name: 'National Bank'
-    }].map(async user => {
+    }
+].reduce(async ($, user) => {
+    await $;
 
-        let helper = new wshelper.ClientHelper({
-            channel: channel,
-            skipInit: true,
-            user: user.username,
-            keyStore: keyStore,
-            networkProfile: networkProfile,
-            txTimeout: 300000
-        });
+    let helper = new wshelper.ClientHelper({
+        channel: channel,
+        skipInit: true,
+        user: user.username,
+        keyStore: keyStore,
+        networkProfile: networkProfile,
+        txTimeout: 300000
+    });
 
-        d('Sending transaction...');
-        await helper.init();
+    d('Sending transaction...');
+    await helper.init();
 
-        try {
-            await helper.useUser(user.username);
+    try {
+        await helper.useUser(user.username);
 
-            const { proposalResponse } = await helper.sendTransactionProposal({
-                fcn: fcn,
-                chaincodeId: chaincode,
-                args: [user.username, user.name],
-            }, true);
+        const { proposalResponse } = await helper.sendTransactionProposal({
+            fcn: fcn,
+            chaincodeId: chaincode,
+            args: [user.username, user.name],
+        }, true);
 
-            res = await helper.processProposal(proposalResponse);
+        res = await helper.processProposal(proposalResponse);
 
-            d(`Transaction sent! ${res.code} ${res.info} ${res.status} ${res.txId}`);
-            d(`Result: ${JSON.stringify(res.result)}`);
+        d(`Transaction sent! ${res.code} ${res.info} ${res.status} ${res.txId}`);
+        d(`Result: ${JSON.stringify(res.result)}`);
 
-        } catch (ex) {
-            if (ex.responses) {
-                if (ex.responses.filter(response => !response.isProposalResponse).length === 0) {
-                    d(`No peer ran tx successfully!`);
-                    d(ex.responses);
-                    d(ex);
-                    return;
-                }
-                d(`At least one peer returned an error!`);
-                d(`This may happen when a transaction queries private data that's not accessible to all peers`);
-                ex.responses.map(response => {
-                    d(`Response from ${response.peer}`);
-                    if (response.isProposalResponse) {
-                        d(JSON.stringify(response));
-                    } else {
-                        // Good response
-                        d(response.response.payload.toString('utf8'));
-                    }
-                });
-            } else {
-                d(`Errors found!`);
-                console.log(ex);
+    } catch (ex) {
+        if (ex.responses) {
+            if (ex.responses.filter(response => !response.isProposalResponse).length === 0) {
+                d(`No peer ran tx successfully!`);
+                d(ex.responses);
                 d(ex);
+                return;
             }
+            d(`At least one peer returned an error!`);
+            d(`This may happen when a transaction queries private data that's not accessible to all peers`);
+            ex.responses.map(response => {
+                d(`Response from ${response.peer}`);
+                if (response.isProposalResponse) {
+                    d(JSON.stringify(response));
+                } else {
+                    // Good response
+                    d(response.response.payload.toString('utf8'));
+                }
+            });
+        } else {
+            d(`Errors found!`);
+            console.log(ex);
+            d(ex);
         }
-    }));
+    }
+}, Promise.resolve());
