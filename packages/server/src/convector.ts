@@ -47,6 +47,7 @@ export const PersonControllerBackEnd = ClientFactory(PersonController, adapter);
  */
 export async function InitServerIdentity() {
     await initAdapter;
+
     const res = await ParticipantControllerBackEnd.get(identityId);
     try {
         const serverIdentity = new Participant(res).toJSON();
@@ -62,12 +63,13 @@ export async function InitServerIdentity() {
     }
 }
 
-const contextPath = join(keyStore + '/' + identityName);
+
+const contextPath = join(resolve(__dirname, keyStore) + '/' + identityName);
 fs.readFile(contextPath, 'utf8', async function (err, data) {
     if (err) {
         throw new Error(`Context in ${contextPath} doesn't exist. Make sure that path resolves to your key stores folder`);
     } else {
-        console.log('Context path with cryptographic materials exists');
+        console.log(`Context path with cryptographic materials exists in ${contextPath}`);
     }
 });
 

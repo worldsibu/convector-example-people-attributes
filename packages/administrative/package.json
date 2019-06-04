@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "seed:enroll": "f() { DEBUG=forma:helper node enrollSeed; }; f",
-    "seed:register": "f() { DEBUG=forma:helper node invoke.js $1 $2;}; f"
+    "seed:data": "f() { DEBUG=forma:helper node invokeSeed;}; f"
   },
   "author": "",
   "license": "ISC",

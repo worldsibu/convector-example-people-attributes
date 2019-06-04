@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PersonControllerBackEnd, refreshAdapter, ParticipantControllerBackEnd } from '../convector';
 import { Person, Attribute } from 'person-cc';
-import { identityId, couchDBView, couchDBHost, couchDBProtocol, couchDBPort } from '../env';
+import { identityId, couchDBView, couchDBHost, couchDBProtocol, couchDBPort, couchDBPassword, couchDBUser } from '../env';
 import { BaseStorage } from '@worldsibu/convector-core';
 import { CouchDBStorage } from '@worldsibu/convector-storage-couchdb';
 import { Participant } from 'participant-cc';
@@ -20,7 +20,13 @@ router.get('/', async (req: Request, res: Response) => {
 BaseStorage.current = new CouchDBStorage({
     host: couchDBHost,
     protocol: couchDBProtocol,
-    port: couchDBPort
+    port: couchDBPort,
+    ...(couchDBUser ? {
+        auth: {
+            user: couchDBUser,
+            pass: couchDBPassword
+        }
+    } : {})
 }, couchDBView);
 
 export async function getAllPerson() {

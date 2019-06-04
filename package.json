@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "start": "npm run env:restart && npm run cc:start -- person",
+    "forma:seed:enroll": "lerna run seed:enroll --scope administrative --stream",
+    "forma:seed:data": "lerna run seed:data --scope administrative --stream",
     "seed": "./seed.sh",
     "install": "npm-run-all -s lerna:install",
     "build": "node ./update-paths.js",

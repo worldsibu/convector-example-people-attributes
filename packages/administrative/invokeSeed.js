@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const d = require('debug')('forma:helper');
 
-const chaincode = 'attributesdb';
+const chaincode = process.env.CHAINCODE || 'person';
 const fcn = 'participant_register';
 const keyStore = path.resolve(__dirname, process.env.KEYSTORE);
 const networkProfile = path.resolve(__dirname, process.env.NETWORKPROFILE);
@@ -15,35 +15,35 @@ d(`NETWORKPROFILE=${networkProfile}`);
 d(`CHAINCODE=${chaincode}`);
 d(`FUNCTION=${fcn}`);
 d(`CHANNEL=${channel}`);
-d(`transientData=${transientData}`);
 
 d('First transaction may take a while');
 
-[{
-    username: 'gov',
-    name: 'Government'
-}, {
-    username: 'mit',
-    name: 'MIT'
-}, {
-    username: 'naba',
-    name: 'National Bank'
-}].forEach(user => {
+Promise.all(
+    [{
+        username: 'gov',
+        name: 'Government'
+    }, {
+        username: 'mit',
+        name: 'MIT'
+    }, {
+        username: 'naba',
+        name: 'National Bank'
+    }].map(async user => {
 
-    let helper = new wshelper.ClientHelper({
-        channel: channel,
-        skipInit: true,
-        user: user.username,
-        keyStore: keyStore,
-        networkProfile: networkProfile,
-        txTimeout: 300000
-    });
+        let helper = new wshelper.ClientHelper({
+            channel: channel,
+            skipInit: true,
+            user: user.username,
+            keyStore: keyStore,
+            networkProfile: networkProfile,
+            txTimeout: 300000
+        });
 
-    d('Sending transaction...');
-    helper.init().then(async () => {
+        d('Sending transaction...');
+        await helper.init();
 
         try {
-            await helper.useUser(user.user);
+            await helper.useUser(user.username);
 
             const { proposalResponse } = await helper.sendTransactionProposal({
                 fcn: fcn,
@@ -67,7 +67,7 @@ d('First transaction may take a while');
                 d(`At least one peer returned an error!`);
                 d(`This may happen when a transaction queries private data that's not accessible to all peers`);
                 ex.responses.map(response => {
-                    d(`Response from ${response.peer.name}`);
+                    d(`Response from ${response.peer}`);
                     if (response.isProposalResponse) {
                         d(JSON.stringify(response));
                     } else {
@@ -81,5 +81,4 @@ d('First transaction may take a while');
                 d(ex);
             }
         }
-    });
-});
+    }));

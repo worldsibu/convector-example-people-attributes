@@ -36,7 +36,7 @@ let member_user = null;
         keyStore: path.resolve(__dirname, process.env.KEYSTORE),
         networkProfile: path.resolve(__dirname, process.env.NETWORKPROFILE),
         caAddress: process.env.CA_ADDRESS,
-        organization: process.argv[4],
+        organization: process.env.ORGANIZATION,
         username: user.username,
         password: user.password,
     };
